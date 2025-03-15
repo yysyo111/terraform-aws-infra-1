@@ -158,7 +158,7 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 ```plaintext
 VPC
 ```
-| TH 項目 | TH 設定値 | TH 備考 |
+| 項目 | 設定値 | 備考 |
 | :--- | :---  | :---  |
 | VPC名 | dev-vpc |  |
 | CIDR | 10.0.0.0/16 |  |
@@ -166,18 +166,35 @@ VPC
 ```plaintext
 サブネット
 ```
+| 項目 | 設定値 | タイプ | AZ | CIDR | 備考 |
+| :--- | :---  | :--- | :--- | :--- | :--- |
+| サブネット名 | dev-public-subnet-1 | パブリック | AZ1 | 10.0.1.0/24 |  |
+| サブネット名 | dev-public-subnet-2 | パブリック | AZ2 | 10.0.2.0/24 |  |
+| サブネット名 | dev-public-subnet-3 | パブリック | AZ3 | 10.0.3.0/24 |  |
+| サブネット名 | dev-private-subnet-1 | プライベート | AZ1 | 10.0.4.0/24 |  |
+| サブネット名 | dev-private-subnet-2 | プライベート | AZ2 | 10.0.5.0/24 |  |
+| サブネット名 | dev-private-subnet-3 | プライベート | AZ3 | 10.0.6.0/24 |  |
 
 ```plaintext
 インターネットゲートウェイ
 ```
+| 項目 | 設定値 | 備考 |
+| :--- | :---  | :---  |
+| インターネットゲートウェイ名 | dev-igw |  |
 
 ```plaintext
 NatGateway
 ```
+| 項目 | 設定値 | 備考 |
+| :--- | :---  | :---  |
+| ナットゲートウェイ名 | dev-nat-gw |  |
 
 ```plaintext
 Elastic IP
 ```
+| 項目 | 設定値 | 備考 |
+| :--- | :---  | :---  |
+| Elastic IP | ■ |  |
 
 
 
