@@ -125,7 +125,7 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 │── outputs.tf                       # 出力定義
 ```
 
-#### 構築手順
+#### 4. 構築手順
 1. VPC & サブネットの構成
 ・CIDR: 10.0.0.0/16 のVPCを作成
 ・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
