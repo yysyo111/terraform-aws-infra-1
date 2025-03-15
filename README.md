@@ -79,3 +79,26 @@ terraform-aws-infra-1
 │── variables.tf                     # グローバル変数定義
 │── outputs.tf                       # 出力定義
 ```
+
+#### 構築手順
+1. VPC & サブネットの構成
+・CIDR: 10.0.0.0/16 のVPCを作成
+・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
+・Public SubnetにInternet Gatewayを接続（ALB配置）
+・Private SubnetにNAT Gatewayを経由する設定（EC2用）
+
+2. Route Table の設定 & 適用
+・Public Subnet 用のルートテーブル（外部と通信可能）
+・Private Subnet 用のルートテーブル（NAT Gateway 経由で外部通信）
+・Terraform で自動適用する
+
+3. Security Group の設定 & 適用
+・ALB, EC2, RDS などの通信ルールを設定
+・SSH, HTTP, HTTPS の許可範囲を明確化
+・Terraform で IAM ロール & ポリシーと合わせて適用する
+
+4. EC2 の構築
+・Auto Scaling Group（ASG）を使うか？ 単一 EC2 インスタンスを作るか？
+・Terraform の modules/aws/ec2/ にモジュールを作成
+・ユーザーデータ（user_data）で初期設定（Nginx インストールなど）
+・ALB（ロードバランサー）と連携するか？
