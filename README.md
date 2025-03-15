@@ -209,7 +209,7 @@ Security Group
 ```
 | 対象 | 許可する通信 | ソース | 備考 |
 | :--- | :---  | :---  | :---  |
-| ALB (Application Load Balancer) | 80, 443 (HTTP, HTTPS) | インターネット (0.0.0.0/0) (igw) |  | 
-| EC2 (アプリケーションサーバー) | 22 (SSH) | 特定の IP（開発者のみ） | ※SystemsManager SessionManagerで接続の方がいいかも  | 
-| EC2 (アプリケーションサーバー) | 80 (HTTP) | ALB からの通信 | ※HTTPS通信はどうなるのか  | 
-| RDS (データベース) | 3306 (MySQL) / 5432 (PostgreSQL) | EC2 からの通信 |   | 
+| ALB (Application Load Balancer) | 80, 443 (HTTP, HTTPS) | インターネット (0.0.0.0/0) (igw) | ALB はパブリックに公開（HTTP, HTTPS 許可） | 
+| EC2 (アプリケーションサーバー) | 22 (SSH) | 特定の IP（開発者のみ） | ※SystemsManager SessionManagerで接続の方がいいかも。<br>SSH は特定の IP のみ許可  | 
+| EC2 (アプリケーションサーバー) | 80 (HTTP) | ALB からの通信 | ※HTTPS通信はどうなるのか。<br>ALB からのみ通信を許可する  | 
+| RDS (データベース) | 3306 (MySQL) / 5432 (PostgreSQL) | EC2 からの通信 |  EC2 からのみ通信可能（外部からの直接接続は禁止） | 
