@@ -199,7 +199,8 @@ Elastic IP
 ```plaintext
 Route Table
 ```
-| Subnet Type | Route Table 名称 | デフォルトルート | 備考 |
+| Subnet Type | Route Table 名称 | デフォルトルート | 送信先 | ターゲット | 備考 |
 | :--- | :---  | :---  | :---  |
-| Public Subnet | dev-public-rt | Internet Gateway (igw) | ALB、ECS、EC2 などが外部アクセス可能 |
-| Private Subnet | private_rt | NAT Gateway (nat_gw) | EC2 や RDS などが外部アクセス可能（セキュアに） |
+| Public Subnet | dev-public-rt | Internet Gateway (igw) | 0.0.0.0/0 | インターネットゲートウェイ | ALB、ECS、EC2 などが外部アクセス可能 |
+| Private Subnet | aws_route_table | NAT Gateway (nat_gw) | 0.0.0.0/0 | ナットゲートウェイ | EC2 や RDS などが外部アクセス可能（セキュアに） |
+
