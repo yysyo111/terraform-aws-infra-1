@@ -81,6 +81,7 @@ terraform-aws-infra-1
 ```
 
 #### 構築手順
+```
 1. VPC & サブネットの構成
 ・CIDR: 10.0.0.0/16 のVPCを作成
 ・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
@@ -102,3 +103,5 @@ terraform-aws-infra-1
 ・Terraform の modules/aws/ec2/ にモジュールを作成
 ・ユーザーデータ（user_data）で初期設定（Nginx インストールなど）
 ・ALB（ロードバランサー）と連携するか？
+```
+
