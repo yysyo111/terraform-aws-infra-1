@@ -126,6 +126,7 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 ```
 
 #### 4. 構築手順
+```plaintext
 1. VPC & サブネットの構成
 ・CIDR: 10.0.0.0/16 のVPCを作成
 ・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
@@ -151,3 +152,4 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 5. CI/CD & 自動デプロイ
 ・GitHub Actions を用いた Terraform の Plan & Apply 自動実行
 ・Docker イメージのビルド & Amazon ECR への Push
+```
