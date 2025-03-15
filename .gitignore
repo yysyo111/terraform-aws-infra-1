@@ -1,0 +1,19 @@
+# Terraform のキャッシュ・一時ファイルを無視
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+crash.log
+*.log
+*.tfvars
+*.tfvars.json
+
+# SSH キーなどの機密情報を含むファイル
+*.pem
+*.key
+
+# エディタ・OS 特有のファイル
+.vscode/
+.idea/
+.DS_Store
