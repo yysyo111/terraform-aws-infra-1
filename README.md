@@ -196,6 +196,10 @@ Elastic IP
 | :--- | :---  | :---  |
 | Elastic IP | ■ |  |
 
-
-
-
+```plaintext
+Route Table
+```
+| Subnet Type | Route Table 名称 | デフォルトルート | 備考 |
+| :--- | :---  | :---  |
+| Public Subnet | public_rt | Internet Gateway (igw) | ALB、ECS、EC2 などが外部アクセス可能 |
+| Private Subnet | private_rt | NAT Gateway (nat_gw) | EC2 や RDS などが外部アクセス可能（セキュアに） |
