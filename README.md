@@ -7,6 +7,7 @@
 terraform-aws-infra-1
 
 #### ディレクトリ構成
+```
 │── modules/                    # 再利用可能なモジュールを格納
 │   ├── aws/                    # AWSサービスごとに分類
 │   │   ├── vpc/                # VPC & ネットワークモジュール
@@ -77,3 +78,4 @@ terraform-aws-infra-1
 │── versions.tf                     # Terraform のバージョン指定
 │── variables.tf                     # グローバル変数定義
 │── outputs.tf                       # 出力定義
+```
