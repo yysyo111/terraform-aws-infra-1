@@ -1,12 +1,49 @@
-"# terraform-aws-infra-1" 
-
 ## 1.プロジェクトの概要
 
 #### 1. プロジェクト名
 
 terraform-aws-infra-1
 
-#### ディレクトリ構成
+#### 3. 使用技術
+## 使用技術
+
+### **Infrastructure**
+- **Cloud Provider:** Amazon Web Services (AWS)
+- **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table
+- **Compute:** Amazon EC2, Auto Scaling Group (ASG), AWS Lambda (予定)
+- **Load Balancing:** AWS Application Load Balancer (ALB)
+- **Container Orchestration:** Amazon ECS (Fargate), Amazon ECR
+- **Storage:** Amazon S3, AWS CloudFront (CDN)
+- **Security:** AWS IAM, Security Group, AWS KMS (予定)
+- **DNS & SSL:** Amazon Route 53, AWS Certificate Manager (ACM)
+
+### **Database**
+- **Managed Database:** Amazon RDS (MySQL, PostgreSQL)
+
+### **Monitoring & Logging**
+- **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)
+- **Logging:** AWS CloudTrail (予定), Amazon S3 Logs
+
+### **Infrastructure as Code (IaC)**
+- **IaC Tool:** Terraform
+- **State Management:** 未定（S3 + DynamoDB 予定）
+- **Configuration Management:** Terraform Modules
+
+### **Deployment & CI/CD**
+- **CI/CD Pipeline:** GitHub Actions
+- **Container Management:** Docker, Amazon ECR
+
+### **Security & Compliance**
+- **IAM Policies:** Least Privilege Access
+- **Networking Security:** Security Groups, IAM Roles
+- **Vulnerability Scanning:** Amazon Inspector (予定)
+
+### **その他**
+- **Backend:** 未定（Lambda/API Gateway 予定）
+- **Environment setup:** Docker（AWS ECS）
+- **Code Repository:** GitHub
+
+#### 2. ディレクトリ構成
 ```
 │── modules/                    # 再利用可能なモジュールを格納
 │   ├── aws/                    # AWSサービスごとに分類
