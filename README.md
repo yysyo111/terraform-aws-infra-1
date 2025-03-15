@@ -153,3 +153,32 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 ・GitHub Actions を用いた Terraform の Plan & Apply 自動実行
 ・Docker イメージのビルド & Amazon ECR への Push
 ```
+
+#### 5. パラメータ値
+```plaintext
+VPC
+```
+| TH 項目 | TH 設定値 | TH 備考 |
+| :--- | :---  | :---  |
+| VPC名 | dev-vpc |  |
+| CIDR | 10.0.0.0/16 |  |
+
+```plaintext
+サブネット
+```
+
+```plaintext
+インターネットゲートウェイ
+```
+
+```plaintext
+NatGateway
+```
+
+```plaintext
+Elastic IP
+```
+
+
+
+
