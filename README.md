@@ -205,7 +205,7 @@ Route Table
 | Private Subnet | aws_route_table | NAT Gateway (nat_gw) | 0.0.0.0/0 | ナットゲートウェイ | EC2 や RDS などが外部アクセス可能（セキュアに） |
 
 ```plaintext
-Route Table
+Security Group
 ```
 | 対象 | 許可する通信 | ソース | 備考 |
 | :--- | :---  | :---  | :---  |
