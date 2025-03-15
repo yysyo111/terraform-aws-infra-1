@@ -109,3 +109,71 @@ resource "aws_nat_gateway" "nat_gw" {
     }
 }
 
+# --- Public Route Table ---
+# Public Route Table を作成
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.VPC.id
+
+  tags = {
+    Name = "dev-public-rt"
+  }
+}  
+
+# Public Route Table に Internet Gateway を追加（外部通信可能）
+# Internet Gateway へのルートを追加
+resource "aws_route" "public_internet_access" {
+  route_table_id = aws_route_table.public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.igw.id
+}
+
+# Public Subnet に Public Route Table を関連付け
+# 各 Subnet に適切な Route Table を関連付ける
+resource "aws_route_table_association" "public_subnet_1_association" {
+  subnet_id = aws_subnet.public_subnet_1.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "public_subnet_2_association" {
+  subnet_id = aws_subnet.public_subnet_2.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "public_subnet_3_association" {
+  subnet_id      = aws_subnet.public_subnet_3.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+# --- Private Route Table ---
+# Private Route Table を作成
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.VPC.id
+
+  tags = {
+    Name = "dev-private-rt"
+  }
+}
+
+# Private Route Table に NAT Gateway を追加（外部通信可能にする）
+# NAT Gateway へのルートを追加
+resource "aws_route" "private_nat_access" {
+  route_table_id = aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.nat_gw.id
+}
+
+# Private Subnet に Private Route Table を関連付け
+# 各 Subnet に適切な Route Table を関連付ける
+resource "aws_route_table_association" "private_subnet_1_association" {
+  subnet_id = aws_subnet.private_subnet_1.id
+  route_table_id = aws_route_table.private_rt.id
+}
+resource "aws_route_table_association" "private_subnet_2_association" {
+  subnet_id      = aws_subnet.private_subnet_2.id
+  route_table_id = aws_route_table.private_rt.id
+}
+
+resource "aws_route_table_association" "private_subnet_3_association" {
+  subnet_id      = aws_subnet.private_subnet_3.id
+  route_table_id = aws_route_table.private_rt.id
+}
