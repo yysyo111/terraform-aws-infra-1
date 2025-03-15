@@ -60,6 +60,10 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 │   │   │   ├── variables.tf    # 変数定義
 │   │   │   ├── outputs.tf      # 出力定義
 │   │   │   ├── terraform.tfvars # 設定値
+│   │   ├── security_groups/    # security_groupsモジュール
+│   │   │   ├── main.tf         # security_groupsの定義
+│   │   │   ├── variables.tf    # 変数定義
+│   │   │   ├── outputs.tf      # 出力定義（Security Group ID）
 │   │   ├── alb/                # ALBモジュール
 │   │   │   ├── main.tf         # ALBリソース定義
 │   │   │   ├── variables.tf    # 変数定義
@@ -206,6 +210,7 @@ Route Table
 
 ```plaintext
 Security Group
+※SSHプロトコルは許可せず、SessionManagerを利用してEC2に接続する。
 ```
 | 対象 | 許可する通信 | ソース | 備考 |
 | :--- | :---  | :---  | :---  |
