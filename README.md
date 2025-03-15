@@ -1,15 +1,16 @@
-## 1.プロジェクトの概要
+# terraform-aws-infra-1
 
-#### 1. プロジェクト名
+## **1. プロジェクトの概要**
+Terraform を用いて AWS インフラをコードで管理するプロジェクトです。  
+VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を適用します。
 
-terraform-aws-infra-1
+---
 
-#### 3. 使用技術
-## 使用技術
+## **2. 使用技術**
 
 ### **Infrastructure**
 - **Cloud Provider:** Amazon Web Services (AWS)
-- **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table
+- **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table, Elastic IP
 - **Compute:** Amazon EC2, Auto Scaling Group (ASG), AWS Lambda (予定)
 - **Load Balancing:** AWS Application Load Balancer (ALB)
 - **Container Orchestration:** Amazon ECS (Fargate), Amazon ECR
@@ -19,32 +20,39 @@ terraform-aws-infra-1
 
 ### **Database**
 - **Managed Database:** Amazon RDS (MySQL, PostgreSQL)
+- **Backup:** AWS Backup（予定）
 
 ### **Monitoring & Logging**
 - **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)
-- **Logging:** AWS CloudTrail (予定), Amazon S3 Logs
+- **Logging:** AWS CloudTrail（予定）, Amazon S3 Logs
+- **Alerting:** AWS SNS（予定）
 
 ### **Infrastructure as Code (IaC)**
 - **IaC Tool:** Terraform
 - **State Management:** 未定（S3 + DynamoDB 予定）
 - **Configuration Management:** Terraform Modules
+- **Provisioning:** AWS Systems Manager（予定）
 
 ### **Deployment & CI/CD**
 - **CI/CD Pipeline:** GitHub Actions
 - **Container Management:** Docker, Amazon ECR
 
 ### **Security & Compliance**
-- **IAM Policies:** Least Privilege Access
+- **IAM Policies:** Least Privilege Access（最小権限アクセス）
 - **Networking Security:** Security Groups, IAM Roles
-- **Vulnerability Scanning:** Amazon Inspector (予定)
+- **Vulnerability Scanning:** Amazon Inspector（予定）
+- **WAF & DDoS Protection:** AWS WAF, AWS Shield（予定）
 
 ### **その他**
 - **Backend:** 未定（Lambda/API Gateway 予定）
 - **Environment setup:** Docker（AWS ECS）
 - **Code Repository:** GitHub
+- **GitHub Actions Workflows:** Terraform Plan & Apply, Docker Image Build & Push
 
-#### 2. ディレクトリ構成
-```
+---
+
+#### 3. ディレクトリ構成
+```plaintext
 │── modules/                    # 再利用可能なモジュールを格納
 │   ├── aws/                    # AWSサービスごとに分類
 │   │   ├── vpc/                # VPC & ネットワークモジュール
@@ -118,7 +126,6 @@ terraform-aws-infra-1
 ```
 
 #### 構築手順
-```
 1. VPC & サブネットの構成
 ・CIDR: 10.0.0.0/16 のVPCを作成
 ・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
@@ -140,5 +147,7 @@ terraform-aws-infra-1
 ・Terraform の modules/aws/ec2/ にモジュールを作成
 ・ユーザーデータ（user_data）で初期設定（Nginx インストールなど）
 ・ALB（ロードバランサー）と連携するか？
-```
 
+5. CI/CD & 自動デプロイ
+・GitHub Actions を用いた Terraform の Plan & Apply 自動実行
+・Docker イメージのビルド & Amazon ECR への Push
