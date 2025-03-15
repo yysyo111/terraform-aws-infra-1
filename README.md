@@ -204,3 +204,12 @@ Route Table
 | Public Subnet | dev-public-rt | Internet Gateway (igw) | 0.0.0.0/0 | インターネットゲートウェイ | ALB、ECS、EC2 などが外部アクセス可能 |
 | Private Subnet | aws_route_table | NAT Gateway (nat_gw) | 0.0.0.0/0 | ナットゲートウェイ | EC2 や RDS などが外部アクセス可能（セキュアに） |
 
+```plaintext
+Route Table
+```
+| 対象 | 許可する通信 | ソース | 備考 |
+| :--- | :---  | :---  | :---  |
+| ALB (Application Load Balancer) | 80, 443 (HTTP, HTTPS) | インターネット (0.0.0.0/0) (igw) |  | 
+| EC2 (アプリケーションサーバー) | 22 (SSH) | 特定の IP（開発者のみ） | ※SystemsManager SessionManagerで接続の方がいいかも  | 
+| EC2 (アプリケーションサーバー) | 80 (HTTP) | ALB からの通信 | ※HTTPS通信はどうなるのか  | 
+| RDS (データベース) | 3306 (MySQL) / 5432 (PostgreSQL) | EC2 からの通信 |   | 
