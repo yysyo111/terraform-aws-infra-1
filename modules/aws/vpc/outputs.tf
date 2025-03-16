@@ -4,3 +4,18 @@ output "vpc_id" {
     description = "作成されたVPCのID"
     value = aws_vpc.VPC.id
 }
+
+# public_subnet_ids を aws_subnet.public[*].id で定義（リスト形式で取得）
+# aws_subnet.public[*].id のようなリスト形式ではなく、個別に [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, ...] のように明示的にリスト化。
+output "public_subnet_ids" {
+    description = "Public Subnet の ID 一覧"
+    value = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, aws_subnet.public_subnet_3.id]
+}
+
+# private_subnet_ids を aws_subnet.private[*].id で定義（リスト形式で取得）
+output "private_subnet_ids" {
+    description = "Private Subnet の ID 一覧"
+    value = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id, aws_subnet.private_subnet_3.id]
+}
+
+
