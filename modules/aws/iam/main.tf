@@ -2,16 +2,30 @@
 resource "aws_iam_role" "ec2_ssm_role" {
     name = "ec2-session-manager-role"
 
-    assume_role_policy = jsonencode({
-        Version = "2012-10-17"
-        Statement = [{
-            Effect = "Allow"
-            Principal = {
-                Service = "ec2.amazonaws.com"
+    # assume_role_policy = jsonencode({
+    #     Version = "2012-10-17"
+    #     Statement = [{
+    #         Effect = "Allow"
+    #         Principal = {
+    #             Service = "ec2.amazonaws.com"
+    #         }
+    #         Action = "sts:AssumeRole"
+    #     }]
+    # })
+    assume_role_policy = <<EOF
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
             }
-            Action = "sts.AssumeRole"
-        }]
-    })
+        ]
+    }
+    EOF
 }
 
 # --- Session Manager 用のポリシーをアタッチ ---

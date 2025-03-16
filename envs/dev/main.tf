@@ -21,3 +21,7 @@ module "security_groups" {
   db_port = 3306
 }
 
+module "iam" {
+  source = "../../modules/aws/iam"
+}
+
