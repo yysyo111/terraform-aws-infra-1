@@ -2,30 +2,20 @@
 resource "aws_iam_role" "ec2_ssm_role" {
     name = "ec2-session-manager-role"
 
-    # assume_role_policy = jsonencode({
-    #     Version = "2012-10-17"
-    #     Statement = [{
-    #         Effect = "Allow"
-    #         Principal = {
-    #             Service = "ec2.amazonaws.com"
-    #         }
-    #         Action = "sts:AssumeRole"
-    #     }]
-    # })
-    assume_role_policy = <<EOF
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Principal": {
-                "Service": "ec2.amazonaws.com"
-                },
-                "Action": "sts:AssumeRole"
-            }
-        ]
-    }
-    EOF
+    # Terraform 公式ドキュメントの推奨通り、jsonencode() を使用するのがベストプラクティス
+    assume_role_policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
+          Sid    = ""
+          Principal = {
+            Service = "ec2.amazonaws.com"
+          }
+        },
+      ]
+    })
 }
 
 # --- Session Manager 用のポリシーをアタッチ ---
@@ -40,3 +30,4 @@ resource "aws_iam_instance_profile" "ec2_ssm_profile" {
     name = "ec2-ssm-profile"
     role = aws_iam_role.ec2_ssm_role.name
 }
+
