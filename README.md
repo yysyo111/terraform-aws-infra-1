@@ -222,14 +222,24 @@ Security Group
 ```plaintext
 AutoScalig
 ```
-| AutoScaling名 | 最小台数 | 最大台数 | ヘルスチェック | 備考 |
+| AutoScaling名 | 起動テンプレート名 | 最小台数 | 最大台数 | 希望希望台数 | ヘルスチェックパス | 備考 |
 | :--- | :---  | :---  | :---  | :---  |
-| XXX | 1台 | 3台 | EC2 インスタンス |  |
+| app-server | app-launch-template | 1台 | 3台 | 1台 | / |  |
+
+```plaintext
+AutoScalig スケーリングポリシー
+```
+| スケールポリシー	 | 条件 | 動作 | 備考 |
+| :--- | :---  | :---  | :---  | :---  |
+| スケールアウト（増加） | CPU 使用率 > 60% | 1 台追加 | |
+| スケールイン（削減） | CPU 使用率 < 30% | 1 台削除 | |
+| スケールアウト（増加） | HTTP リクエスト数 > 2000/分 | 1 台追加 | |
+| スケールイン（削減） | HTTP リクエスト数 < 500/分 | 1 台削除 | |
 
 ```plaintext
 ALB TargetGroup
 ```
 | ALB名 | ターゲットグループ名 | HTTP/HTTPS | ACM（ SSL 証明書） | 備考 |
 | :--- | :---  | :---  | :---  | :---  |
-|  |  |  |  |  |
+| app-load-balancer | app-target-group | HTTP | ー |  |
 
