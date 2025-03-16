@@ -219,3 +219,17 @@ Security Group
 | RDS (データベース) | 3306 (MySQL) / 5432 (PostgreSQL) | EC2 からの通信 |  EC2 からのみ通信可能（外部からの直接接続は禁止） | 
 <!--| EC2 (アプリケーションサーバー) | 22 (SSH) | 特定の IP（開発者のみ） | SystemsManager SessionManagerで接続の為不要。<br>SSH は特定の IP のみ許可  |  -->
 
+```plaintext
+AutoScalig
+```
+| AutoScaling名 | 最小台数 | 最大台数 | ヘルスチェック | 備考 |
+| :--- | :---  | :---  | :---  | :---  |
+| XXX | 1台 | 3台 | EC2 インスタンス |  |
+
+```plaintext
+ALB TargetGroup
+```
+| ALB名 | ターゲットグループ名 | HTTP/HTTPS | ACM（ SSL 証明書） | 備考 |
+| :--- | :---  | :---  | :---  | :---  |
+|  |  |  |  |  |
+
