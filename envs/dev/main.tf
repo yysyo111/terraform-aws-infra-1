@@ -59,3 +59,12 @@ module "autoscaling" {
   iam_instance_profile_name = module.iam.ec2_ssm_profile_name
   target_group_arn = module.alb.target_group_arn
 }
+
+module "rds" {
+  source = "../../modules/aws/rds"
+
+  db_username = var.db_username
+  db_password = var.db_password
+  private_subnet_ids = module.vpc.private_subnet_ids
+  db_sg_id = module.security_groups.rds_sg_id
+}

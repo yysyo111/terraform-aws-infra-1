@@ -58,6 +58,8 @@ resource "aws_security_group" "ec2-sg" {
 
 # --- RDS の Security Group ---
 resource "aws_security_group" "rds_sg" {
+    name = "rds-sg"
+    description = "RDS security group"
     vpc_id = var.vpc_id
 
     # MySQL (3306) / PostgreSQL (5432) 許可（EC2 からのみ）
@@ -77,7 +79,7 @@ resource "aws_security_group" "rds_sg" {
     }
 
     tags = {
-        Name = "rds-security-group"
+        Name = "rds-sg"
     }
 }
 
