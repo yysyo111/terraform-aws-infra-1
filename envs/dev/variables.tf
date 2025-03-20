@@ -29,4 +29,5 @@ variable "db_username" {
 variable "db_password" {
     description = "RDSの管理パスワード"
     type = string
+    sensitive = true
 }

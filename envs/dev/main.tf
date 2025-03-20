@@ -68,3 +68,15 @@ module "rds" {
   private_subnet_ids = module.vpc.private_subnet_ids
   db_sg_id = module.security_groups.rds_sg_id
 }
+
+
+module "ecs" {
+  source = "../../modules/aws/ecs"
+
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id = module.security_groups.ecs_sg_id
+  target_group_arn = module.alb.target_group_arn
+  container_image = module.ecs.aws_ecr_repository_url
+  ecs_task_excution_role_arn = module.iam.ecs_task_execution_role_arn
+}
+

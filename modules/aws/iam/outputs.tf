@@ -8,3 +8,7 @@ output "ec2_ssm_profile_name" {
     value = aws_iam_instance_profile.ec2_ssm_profile.name
 }
 
+output "ecs_task_execution_role_arn" {
+  description = "ECS タスク実行ロール ARN"
+  value       = aws_iam_role.ecs_task_execution_role.arn
+}
