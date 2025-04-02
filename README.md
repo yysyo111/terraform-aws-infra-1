@@ -167,5 +167,4 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 8. **CI/CD & 自動デプロイ（未実装）**
    - GitHub Actions を用いた Terraform の Plan & Apply 自動実行
    - Docker イメージのビルド & Amazon ECR への Push
-```
 
