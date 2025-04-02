@@ -1,8 +1,16 @@
 # terraform-aws-infra-1
 
 ## **1. プロジェクトの概要**
-Terraform を用いて AWS インフラをコードで管理するプロジェクトです。
-VPC、ECS（Fargate）、RDS（MySQL）などを構築し、将来的には GitHub Actions を用いた CI/CD の自動化も予定しています。
+Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジェクトです。
+- **ネットワーク(VPC/サブネット)**
+- **ECS Fargate + ALB**
+- **Docker / ECR を用いた Web アプリのデプロイ**
+- **RDS (MySQL)**
+
+今後の実装
+- **CI/CD の GitHub Actions 連携**
+- **Route53 + ACM + HTTPS 対応**
+- **S3 + CloudFront のステーティックサイト**
 
 ---
 
