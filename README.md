@@ -1,8 +1,8 @@
 # terraform-aws-infra-1
 
 ## **1. プロジェクトの概要**
-Terraform を用いて AWS インフラをコードで管理するプロジェクトです。  
-VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を適用します。
+Terraform を用いて AWS インフラをコードで管理するプロジェクトです。
+VPC、ECS（Fargate）、RDS（MySQL）などを構築し、将来的には GitHub Actions を用いた CI/CD の自動化も予定しています。
 
 ---
 
@@ -11,27 +11,23 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 ### **Infrastructure**
 - **Cloud Provider:** Amazon Web Services (AWS)
 - **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table, Elastic IP
-- **Compute:** Amazon EC2, Auto Scaling Group (ASG), AWS Lambda (予定)
 - **Load Balancing:** AWS Application Load Balancer (ALB)
 - **Container Orchestration:** Amazon ECS (Fargate), Amazon ECR
 - **Storage:** Amazon S3, AWS CloudFront (CDN)
-- **Security:** AWS IAM, Security Group, AWS KMS (予定)
-- **DNS & SSL:** Amazon Route 53, AWS Certificate Manager (ACM)
+- **Security:** AWS IAM, Security Group
+- **DNS & SSL:** Amazon Route 53, AWS Certificate Manager (ACM)（予定）
 
 ### **Database**
-- **Managed Database:** Amazon RDS (MySQL, PostgreSQL)
-- **Backup:** AWS Backup（予定）
+- **Managed Database:** Amazon RDS (MySQL)
 
 ### **Monitoring & Logging**
-- **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)
-- **Logging:** AWS CloudTrail（予定）, Amazon S3 Logs
+- **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)（予定）
 - **Alerting:** AWS SNS（予定）
 
 ### **Infrastructure as Code (IaC)**
 - **IaC Tool:** Terraform
-- **State Management:** 未定（S3 + DynamoDB 予定）
+- **State Management:** 未定（S3予定）
 - **Configuration Management:** Terraform Modules
-- **Provisioning:** AWS Systems Manager（予定）
 
 ### **Deployment & CI/CD**
 - **CI/CD Pipeline:** GitHub Actions
@@ -131,29 +127,40 @@ VPC、EC2、RDS、ECS などを構築し、GitHub Actions を用いた CI/CD を
 
 #### 4. 構築手順
 ```plaintext
-1. VPC & サブネットの構成
-・CIDR: 10.0.0.0/16 のVPCを作成
-・Public & Private Subnetをそれぞれ3つずつ作成（3つのAZ対応）
-・Public SubnetにInternet Gatewayを接続（ALB配置）
-・Private SubnetにNAT Gatewayを経由する設定（EC2用）
+1. VPC・サブネットの構成
+- VPC（10.0.0.0/16）を作成
+- Public / Private サブネットを AZ ごとに3つずつ作成
+- Public サブネットには IGW（インターネットゲートウェイ）を接続
+- Private サブネットから外部接続するため NAT Gateway を作成
 
-2. Route Table の設定 & 適用
-・Public Subnet 用のルートテーブル（外部と通信可能）
-・Private Subnet 用のルートテーブル（NAT Gateway 経由で外部通信）
-・Terraform で自動適用する
+2. Route Table の設定
+- Public 向けに IGW 経由のルート、Private 向けに NAT Gateway 経由のルートを作成
 
-3. Security Group の設定 & 適用
-・ALB, EC2, RDS などの通信ルールを設定
-・SSH, HTTP, HTTPS の許可範囲を明確化
-・Terraform で IAM ロール & ポリシーと合わせて適用する
+3. Security Group の設定
+- ALB → 0.0.0.0/0 の HTTP/HTTPS 許可
+- ECS → ALB からの HTTP 許可
+- RDS → ECS からの接続のみ許可（MySQL ポート）
 
-4. EC2 の構築
-・Auto Scaling Group（ASG）を使うか？ 単一 EC2 インスタンスを作るか？
-・Terraform の modules/aws/ec2/ にモジュールを作成
-・ユーザーデータ（user_data）で初期設定（Nginx インストールなど）
-・ALB（ロードバランサー）と連携するか？
+4. IAM ロール
+- ECS タスク用の実行ロール（AmazonECSTaskExecutionRolePolicy など）を作成
+- Session Manager で EC2 を使わずコンテナ内にアクセスする構成
 
-5. CI/CD & 自動デプロイ
+5. RDS（MySQL）の構築
+- Private Subnet に配置、セキュアに構成
+- Terraform による DB ユーザー、パスワード定義（変数化）
+
+6. ECS（Fargate）+ ECR の構築
+- ECR に Web アプリ（nginx）の Docker イメージを push
+- ECS タスク定義に image を指定し、ALB 経由で公開
+- タスク定義にポート 80 をマッピング
+
+7. Docker イメージのビルド & デプロイ
+- `docker build -t web-app .`
+- `docker tag web-app:latest [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest`
+- `docker push [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest`
+- `aws ecs update-service --cluster dev-ecs-cluster --service web-service --force-new-deployment`
+
+5. CI/CD & 自動デプロイ（未実装）
 ・GitHub Actions を用いた Terraform の Plan & Apply 自動実行
 ・Docker イメージのビルド & Amazon ECR への Push
 ```

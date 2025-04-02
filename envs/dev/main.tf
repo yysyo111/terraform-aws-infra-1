@@ -49,16 +49,16 @@ module "alb" {
   alb_sg_id = module.security_groups.alb_sg_id
 }
 
-module "autoscaling" {
-  source = "../../modules/aws/autoscaling"
+# module "autoscaling" {
+#   source = "../../modules/aws/autoscaling"
 
-  ami_id = "ami-0599b6e53ca798bb2"
-  instance_type = "t2.micro"
-  private_subnet_ids = module.vpc.private_subnet_ids
-  ec2_sg_id = module.security_groups.ec2_sg_id
-  iam_instance_profile_name = module.iam.ec2_ssm_profile_name
-  target_group_arn = module.alb.target_group_arn
-}
+#   ami_id = "ami-0599b6e53ca798bb2"
+#   instance_type = "t2.micro"
+#   private_subnet_ids = module.vpc.private_subnet_ids
+#   ec2_sg_id = module.security_groups.ec2_sg_id
+#   iam_instance_profile_name = module.iam.ec2_ssm_profile_name
+#   target_group_arn = module.alb.target_group_arn
+# }
 
 module "rds" {
   source = "../../modules/aws/rds"
