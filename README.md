@@ -139,23 +139,26 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
    # ECS サービスの強制デプロイ（更新）
    aws ecs update-service --cluster dev-ecs-cluster --service web-service --force-new-deployment
 
+   # ALB の DNS を通して Web アプリにアクセスできるか確認
+
 8. **CI/CD & 自動デプロイ（未実装）**
    - GitHub Actions による Terraform Plan / Apply 自動化
    - Docker build → ECR push → ECS deploy の自動化パイプライン構築
 
 #### 5. リソース削除（クリーンアップ手順）
-
+1. **リソース削除（クリーンアップ手順）**
    ```bash
+   # 開発環境フォルダに移動
+   cd envs/dev
+
    # Terraformで削除
    terraform destroy -auto-approve
 
-   # Dockerイメージ削除（オプション）
+   # Dockerイメージ削除
    docker image rm web-app:latest
 
    # ECR内のイメージ削除
-   aws ecr batch-delete-image \
-     --repository-name web-app \
-     --image-ids imageTag=latest
+   aws ecr batch-delete-image --repository-name web-app --image-ids imageTag=latest
 
    # ECRリポジトリ自体を削除（中身が空である必要あり）
    aws ecr delete-repository --repository-name web-app
