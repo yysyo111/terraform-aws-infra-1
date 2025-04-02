@@ -17,4 +17,3 @@
 
 ・modules/aws/ecs/にECS（Fargate）関連のモジュールを作成
 ・envs/dev/でTerraformのmodule "ecs"で呼び出してデプロイ
-

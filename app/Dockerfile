@@ -5,4 +5,4 @@ FROM nginx:latest
 COPY ./html /usr/share/nginx/index.html
 
 # 3. コンテナが起動したら Nginx を実行する
-CMD ["nginx", "-g", "daemon off:"]
+CMD ["nginx", "-g", "daemon off;"]
