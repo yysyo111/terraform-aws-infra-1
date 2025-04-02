@@ -1,7 +1,9 @@
 # terraform-aws-infra-1
 
 ## **1. プロジェクトの概要**
+
 Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジェクトです。
+
 - **ネットワーク(VPC/サブネット)**
 - **ECS Fargate + ALB**
 - **Docker / ECR を用いた Web アプリのデプロイ**
@@ -10,14 +12,15 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 今後の実装
 - **CI/CD の GitHub Actions 連携**
 - **Route53 + ACM + HTTPS 対応**
-- **S3 + CloudFront のステーティックサイト**
+- **S3 + CloudFront のコンテンツ提供**
 
 ---
 
 ## **2. 使用技術**
 
 ### **Infrastructure**
-- **Cloud Provider:** Amazon Web Services (AWS)
+
+- **Cloud Provider:** Amazon Web Services (ap-northeast-1 / 東京)
 - **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table, Elastic IP
 - **Load Balancing:** AWS Application Load Balancer (ALB)
 - **Container Orchestration:** Amazon ECS (Fargate), Amazon ECR
@@ -25,27 +28,33 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 - **Security:** AWS IAM, Security Group
 - **DNS & SSL:** Amazon Route 53, AWS Certificate Manager (ACM)（予定）
 
-### **Database**
+### Database
+
 - **Managed Database:** Amazon RDS (MySQL)
 
-### **Monitoring & Logging**
+### Monitoring & Logging
+
 - **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)（予定）
 - **Alerting:** AWS SNS（予定）
 
-### **Infrastructure as Code (IaC)**
+### Infrastructure as Code (IaC)
+
 - **IaC Tool:** Terraform
 - **State Management:** 未定（S3予定）
 - **Configuration Management:** Terraform Modules
 
-### **Deployment & CI/CD**
+### Deployment & CI/CD
+
 - **CI/CD Pipeline:** GitHub Actions
 - **Docker:** ECR への push
 
-### **Security & Compliance**
+### Security & Compliance
+
 - **IAM Policies:** Least Privilege Access（最小権限アクセス）
 - **Networking Security:** Security Groups, IAM Roles
 
-### **その他**
+### その他
+
 - **Code Repository:** GitHub
 - **GitHub Actions Workflows:** Terraform Plan & Apply, Docker Image Build & Push（予定）
 
@@ -99,57 +108,64 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 │   │   ├── provider.tf         # AWSプロバイダー（東京リージョン）
 │   ├── prod/                   # 本番環境（未実装）
 │
-│── .github/                      # GitHub Actions（CI/CD用）（未実装）
+│── .github/                    # GitHub Actions（CI/CD用）（未実装）
 │   ├── workflows/
-│   │   ├── terraform.yml        # Terraform 自動適用ワークフロー
+│   │   ├── terraform.yml       # Terraform 自動適用ワークフロー
 │
-│── README.md                     # プロジェクト概要・使い方
-│── .gitignore                     # Git管理から除外するファイル
-│── provider.tf                     # AWSプロバイダー設定
+│── README.md                   # プロジェクト概要・使い方
+│── .gitignore                  # Git管理から除外するファイル
+│── provider.tf                 # AWSプロバイダー設定
 │── app
-│   ├── Dockerfile
-│   ├── html
+│   ├── Dockerfile              # Dockerfile
+│   ├── html                    # htmlファイル
 ```
 
 #### 4. 構築手順
-```plaintext
-1. VPC・サブネットの構成
-- VPC（10.0.0.0/16）を作成
-- Public / Private サブネットを AZ ごとに3つずつ作成
-- Public サブネットには IGW（インターネットゲートウェイ）を接続
-- Private サブネットから外部接続するため NAT Gateway を作成
+1. **VPC・サブネットの構成**
 
-2. Route Table の設定
-- Public 向けに IGW 経由のルート、Private 向けに NAT Gateway 経由のルートを作成
+   - VPC（10.0.0.0/16）を作成
+   - Public / Private サブネットを AZ ごとに3つずつ作成
+   - Public サブネットには IGW（インターネットゲートウェイ）を接続
+   - Private サブネットから外部接続するため NAT Gateway を作成
 
-3. Security Group の設定
-- ALB → 0.0.0.0/0 の HTTP/HTTPS 許可
-- ECS → ALB からの HTTP 許可
-- RDS → ECS からの接続のみ許可（MySQL ポート）
+2. **Route Table の設定**
 
-4. IAM ロール
-- ECS タスク用の実行ロール（AmazonECSTaskExecutionRolePolicy など）を作成
-- Session Manager で EC2 を使わずコンテナ内にアクセスする構成
+   - Public 向けに IGW 経由のルート、Private 向けに NAT Gateway 経由のルートを作成
 
-5. RDS（MySQL）の構築
-- Private Subnet に配置、セキュアに構成
-- Terraform による DB ユーザー、パスワード定義（変数化）
+3. **Security Group の設定**
 
-6. ECS（Fargate）+ ECR の構築
-- ECR に Web アプリ（nginx）の Docker イメージを push
-- ECS タスク定義に image を指定し、ALB 経由で公開
-- タスク定義にポート 80 をマッピング
+   - ALB → 0.0.0.0/0 の HTTP/HTTPS 許可
+   - ECS → ALB からの HTTP 許可
+   - RDS → ECS からの接続のみ許可（MySQL ポート）
 
-7. Docker イメージのビルド & デプロイ
-- # Docker image build & push
-- `docker build -t web-app .`
-- `docker tag web-app:latest [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest`
-- `docker push [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest`
-- # ECS service update
-- `aws ecs update-service --cluster dev-ecs-cluster --service web-service --force-new-deployment`
+4. **IAM ロール**
 
-5. CI/CD & 自動デプロイ（未実装）
-・GitHub Actions を用いた Terraform の Plan & Apply 自動実行
-・Docker イメージのビルド & Amazon ECR への Push
+   - ECS タスク用の実行ロール（AmazonECSTaskExecutionRolePolicy など）を作成
+   - Session Manager で EC2 を使わずコンテナ内にアクセスする構成
+
+5. **RDS（MySQL）の構築**
+
+   - Private Subnet に配置、セキュアに構成
+   - Terraform による DB ユーザー、パスワード定義（変数化）
+
+6. **ECS（Fargate）+ ECR の構築**
+
+   - ECR に Web アプリ（nginx）の Docker イメージを push
+   - ECS タスク定義に image を指定し、ALB 経由で公開
+   - タスク定義にポート 80 をマッピング
+
+7. **Docker イメージのビルド & デプロイ**
+
+   ```bash
+   # Docker image build & push
+   docker build -t web-app .
+   docker tag web-app:latest [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest
+   docker push [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest
+   # ECS service update
+   aws ecs update-service --cluster dev-ecs-cluster --service web-service --force-new-deployment
+
+8. **CI/CD & 自動デプロイ（未実装）**
+   - GitHub Actions を用いた Terraform の Plan & Apply 自動実行
+   - Docker イメージのビルド & Amazon ECR への Push
 ```
 
