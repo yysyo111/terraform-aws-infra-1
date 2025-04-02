@@ -96,7 +96,8 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 
 2. **Route Table の設定**
 
-   - Public 向けに IGW 経由のルート、Private 向けに NAT Gateway 経由のルートを作成
+   - パブリックサブネット ⇒ IGW 経由で通信可能に設定
+   - プライベートサブネット ⇒ NAT Gateway 経由で外部通信可能に設定
 
 3. **Security Group の設定**
 
@@ -106,7 +107,7 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 
 4. **IAM ロール**
 
-   - ECS タスク用の実行ロール（AmazonECSTaskExecutionRolePolicy など）を作成
+   - ECS タスク用の実行ロールを作成（AmazonECSTaskExecutionRolePolicy をアタッチ）
    - Session Manager で EC2 を使わずコンテナ内にアクセスする構成
 
 5. **RDS（MySQL）の構築**
@@ -123,14 +124,39 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 7. **Docker イメージのビルド & デプロイ**
 
    ```bash
-   # Docker image build & push
+   # Dockerイメージの作成
    docker build -t web-app .
+
+   # ECR にログイン（AWS CLI）
+   aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin [account_id].dkr.ecr.ap-northeast-1.amazonaws.com
+
+   # ECR向けにタグ付け
    docker tag web-app:latest [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest
+
+   # ECRへPush
    docker push [account_id].dkr.ecr.ap-northeast-1.amazonaws.com/web-app:latest
-   # ECS service update
+
+   # ECS サービスの強制デプロイ（更新）
    aws ecs update-service --cluster dev-ecs-cluster --service web-service --force-new-deployment
 
 8. **CI/CD & 自動デプロイ（未実装）**
-   - GitHub Actions を用いた Terraform の Plan & Apply 自動実行
-   - Docker イメージのビルド & Amazon ECR への Push
+   - GitHub Actions による Terraform Plan / Apply 自動化
+   - Docker build → ECR push → ECS deploy の自動化パイプライン構築
+
+#### 5. リソース削除（クリーンアップ手順）
+
+   ```bash
+   # Terraformで削除
+   terraform destroy -auto-approve
+
+   # Dockerイメージ削除（オプション）
+   docker image rm web-app:latest
+
+   # ECR内のイメージ削除
+   aws ecr batch-delete-image \
+     --repository-name web-app \
+     --image-ids imageTag=latest
+
+   # ECRリポジトリ自体を削除（中身が空である必要あり）
+   aws ecr delete-repository --repository-name web-app
 
