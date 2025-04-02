@@ -4,59 +4,31 @@
 
 Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジェクトです。
 
-- **ネットワーク(VPC/サブネット)**
-- **ECS Fargate + ALB**
-- **Docker / ECR を用いた Web アプリのデプロイ**
-- **RDS (MySQL)**
-
-今後の実装
-- **CI/CD の GitHub Actions 連携**
-- **Route53 + ACM + HTTPS 対応**
-- **S3 + CloudFront のコンテンツ提供**
+- **VPC / Subnet / RouteTable / NAT Gateway / IGW のネットワーク構成**
+- **ECS (Fargate) + ALB による Web アプリケーションの公開**
+- **ECR に push した Docker イメージを ECS 上で実行**
+- **RDS (MySQL) の構築と接続**
 
 ---
 
 ## **2. 使用技術**
 
-### **Infrastructure**
+### **インフラ構成技術（使用技術）**
 
-- **Cloud Provider:** Amazon Web Services (ap-northeast-1 / 東京)
-- **VPC & Networking:** VPC, Subnet (Public & Private), Internet Gateway (IGW), NAT Gateway, Route Table, Elastic IP
-- **Load Balancing:** AWS Application Load Balancer (ALB)
-- **Container Orchestration:** Amazon ECS (Fargate), Amazon ECR
-- **Storage:** Amazon S3, AWS CloudFront (CDN)（予定）
-- **Security:** AWS IAM, Security Group
-- **DNS & SSL:** Amazon Route 53, AWS Certificate Manager (ACM)（予定）
+- **クラウド基盤:** AWS（東京リージョン）
+- **ネットワーク:** VPC, Public/Private Subnet, IGW, NAT Gateway, Route Table
+- **コンテナ:** ECS (Fargate), ECR, ALB
+- **データベース:** RDS (MySQL)
+- **セキュリティ:** IAMロール、セキュリティグループ
+- **IaC:** Terraform（モジュール構成）
+- **デプロイ:** Docker & GitHub Actions（ECR Push & ECS Deploy）
 
-### Database
+### 今後の実装予定
 
-- **Managed Database:** Amazon RDS (MySQL)
-
-### Monitoring & Logging
-
-- **Monitoring:** Amazon CloudWatch (Metrics, Logs, Alarms)（予定）
-- **Alerting:** AWS SNS（予定）
-
-### Infrastructure as Code (IaC)
-
-- **IaC Tool:** Terraform
-- **State Management:** 未定（S3予定）
-- **Configuration Management:** Terraform Modules
-
-### Deployment & CI/CD
-
-- **CI/CD Pipeline:** GitHub Actions
-- **Docker:** ECR への push
-
-### Security & Compliance
-
-- **IAM Policies:** Least Privilege Access（最小権限アクセス）
-- **Networking Security:** Security Groups, IAM Roles
-
-### その他
-
-- **Code Repository:** GitHub
-- **GitHub Actions Workflows:** Terraform Plan & Apply, Docker Image Build & Push（予定）
+- Route53 + ACM による独自ドメイン/HTTPS 対応
+- S3 + CloudFront による静的コンテンツ配信
+- CloudWatch Logs / Metrics 連携
+- GitHub Actions による CI/CD 自動化
 
 ---
 
@@ -80,20 +52,14 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 │   │   │   ├── main.tf         # RDSリソース定義
 │   │   │   ├── variables.tf    # 変数定義
 │   │   │   ├── outputs.tf      # 出力定義
-│   │   ├── s3_cloudfront/      # S3 + CloudFrontモジュール（未実装）
-│   │   │   ├── main.tf         # S3 & CloudFront定義
-│   │   │   ├── variables.tf    # 変数定義
-│   │   │   ├── outputs.tf      # 出力定義
+│   │   ├── (s3_cloudfront/)    # S3 + CloudFrontモジュール（未実装）
 │   │   ├── ecs/                # ECS (Fargate) & ECRモジュール
 │   │   │   ├── main.tf         # ECS Cluster & Service
 │   │   │   ├── task_definition.tf # ECSタスク定義
 │   │   │   ├── ecr.tf          # ECRリポジトリ
 │   │   │   ├── variables.tf    # 変数定義
 │   │   │   ├── outputs.tf      # 出力定義
-│   │   ├── route53_acm/        # Route 53 + ACM (SSL) モジュール（未実装）
-│   │   │   ├── main.tf         # Route 53 + ACM 設定
-│   │   │   ├── variables.tf    # 変数定義
-│   │   │   ├── outputs.tf      # 出力定義
+│   │   ├── (route53_acm/)      # Route 53 + ACM (SSL) モジュール（未実装）
 │   │   ├── iam/                # IAMロール & ポリシーモジュール
 │   │   │   ├── main.tf         # IAMリソース定義
 │   │   │   ├── variables.tf    # 変数定義
@@ -116,8 +82,8 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 │── .gitignore                  # Git管理から除外するファイル
 │── provider.tf                 # AWSプロバイダー設定
 │── app
-│   ├── Dockerfile              # Dockerfile
-│   ├── html                    # htmlファイル
+│   ├── Dockerfile              # NginxベースのWebコンテナ
+│   ├── html                    # HTMLファイル
 ```
 
 #### 4. 構築手順
