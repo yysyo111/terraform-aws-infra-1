@@ -80,3 +80,11 @@ module "ecs" {
   ecs_task_excution_role_arn = module.iam.ecs_task_execution_role_arn
 }
 
+
+
+module "s3_cloudfront" {
+  source = "../../modules/aws/s3_cloudfront"
+  bucket_name = var.bucket_name
+  environment = var.environment
+}
+

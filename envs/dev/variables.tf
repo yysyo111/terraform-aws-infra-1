@@ -31,3 +31,13 @@ variable "db_password" {
     type = string
     sensitive = true
 }
+
+variable "bucket_name" {
+  description = "S3バケット名"
+  type = string
+}
+
+variable "environment" {
+  description = "環境名（dev, prodなど）"
+  type = string
+}
