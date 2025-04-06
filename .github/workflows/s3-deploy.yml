@@ -25,4 +25,4 @@ jobs:
 
       - name: Upload static content to S3
         run: |
-          aws s3 sync ./app/html s3://your-bucket-name --delete
+          aws s3 sync ./app/html s3://terrfrom-s3-bucket-yoshi2025--delete
