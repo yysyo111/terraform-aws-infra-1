@@ -3,13 +3,16 @@ resource "aws_s3_bucket" "static_site" {
     bucket = var.bucket_name
 }
 
-resource "aws_s3_bucket_acl" "static_site_acl" {
-  bucket = aws_s3_bucket.static_site.id
-  acl    = "private"
-}
-
 locals {
   s3_origin_id = "s3-origin"
+}
+
+resource "aws_s3_bucket_website_configuration" "static_site" {
+  bucket = aws_s3_bucket.static_site.id
+
+  index_document {
+    suffix = "index.html"
+  }
 }
 
 # CloudFront OAC の作成

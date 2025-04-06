@@ -85,8 +85,11 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 │── .gitignore                  # Git管理から除外するファイル
 │── provider.tf                 # AWSプロバイダー設定
 │── app
-│   ├── Dockerfile              # NginxベースのWebコンテナ
-│   ├── html                    # HTMLファイル
+│   ├── Dockerfile              # ECS(Nginx)用Dockerfile
+│   ├── html/                   # ECSコンテナに組み込むWebコンテンツディレクトリ
+│   │   ├── index.html          # Webコンテンツ用HTMLファイル
+│   ├── static/                 # 静的コンテンツディレクトリ
+│   │   ├── index.html          # 静的コンテンツ用HTMLファイル
 ```
 
 #### 4. 構築手順
@@ -151,7 +154,7 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 #### 5. リソース削除（クリーンアップ手順）
 1. **リソース削除（クリーンアップ手順）**
    ```bash
-   # 開発環境フォルダに移動
+   # 静的コンテンツフォルダに移動
    cd envs/dev
 
    # Terraformで削除
@@ -166,3 +169,11 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
    # ECRリポジトリ自体を削除（中身が空である必要あり）
    aws ecr delete-repository --repository-name web-app
 
+#### 6. 静的コンテンツファイルアップロードコマンド
+1. **静的コンテンツファイルアップロード**
+   ```bash
+   # 静的コンテンツフォルダに移動
+   cd app/static/
+
+   # アップロードコマンド
+   aws s3 cp app/static/ s3://terrfrom-s3-bucket-yoshi2025 --recursive
