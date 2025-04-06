@@ -179,7 +179,7 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
    # アップロードコマンド
    aws s3 cp app/static/ s3://terrfrom-s3-bucket-yoshi2025 --recursive
 
-#### 6. 静的コンテンツファイル自動アップロードするワークフロー
+#### 7. 静的コンテンツファイル自動アップロードするワークフロー
 1. **静的コンテンツファイル自動アップロード**
    ```bash
    # 静的コンテンツファイル（index.html）を更新する
