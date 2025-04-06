@@ -26,3 +26,10 @@ jobs:
       - name: Upload static content to S3
         run: |
           aws s3 sync ./static/index.html s3://terrfrom-s3-bucket-yoshi2025 --delete
+      - name: CloudFrontキャッシュの無効化
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
+            --paths "/*"
+        env:
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
