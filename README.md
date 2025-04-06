@@ -80,6 +80,7 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 │── .github/                    # GitHub Actions（CI/CD用）（未実装）
 │   ├── workflows/
 │   │   ├── terraform.yml       # Terraform 自動適用ワークフロー
+│   │   ├── s3-deploy.yml       # S3 に静的ファイル 自動アップロードするワークフロー
 │
 │── README.md                   # プロジェクト概要・使い方
 │── .gitignore                  # Git管理から除外するファイル
@@ -177,3 +178,26 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 
    # アップロードコマンド
    aws s3 cp app/static/ s3://terrfrom-s3-bucket-yoshi2025 --recursive
+
+#### 6. 静的コンテンツファイル自動アップロードするワークフロー
+1. **静的コンテンツファイル自動アップロード**
+   ```bash
+   # 静的コンテンツファイル（index.html）を更新する
+   cd app/static/index.html
+
+   # プロジェクトフォルダに移動
+   cd terraform-aws-infra-1
+
+   # 次のコミットに含めるための準備（ステージング）を行う
+   git add .
+
+   # 指定したメッセージと共にコミットする
+   git commit -m "static index.html update"
+
+   #  ローカルリポジトリのコミットをリモートリポジトリに送信する
+   git push origin main
+
+   # GitHub Actions タブを確認
+   Upload to S3が実行されていることを確認する
+
+   # CloudFront 経由で静的サイトURLにアクセスして確認
