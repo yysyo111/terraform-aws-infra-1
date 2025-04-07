@@ -20,13 +20,14 @@ Terraform を用いて AWS の ECS(Fargate)環境を主に構築したプロジ�
 - **コンテナ:** ECS (Fargate), ECR, ALB
 - **データベース:** RDS (MySQL)
 - **セキュリティ:** IAMロール、セキュリティグループ
+- **静的コンテンツ配信:** CloudFront、S3
+- **S3アップロード自動化:** GitHub Actions
 - **IaC:** Terraform（モジュール構成）
 - **デプロイ:** Docker & GitHub Actions（ECR Push & ECS Deploy）
 
 ### 今後の実装予定
 
 - Route53 + ACM による独自ドメイン/HTTPS 対応
-- S3 + CloudFront による静的コンテンツ配信
 - CloudWatch Logs / Metrics 連携
 - GitHub Actions による CI/CD 自動化
 
