@@ -41,3 +41,8 @@ variable "environment" {
   description = "環境名（dev, prodなど）"
   type = string
 }
+
+variable "repository" {
+  description = "GitHubリポジトリ名（username/repo）"
+  type        = string
+}

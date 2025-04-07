@@ -88,3 +88,10 @@ module "s3_cloudfront" {
   environment = var.environment
 }
 
+module "iam_github_oidc" {
+  source = "../../modules/aws/iam_github_oidc"
+  environment = var.environment
+  repository = var.repository
+  bucket_name = var.bucket_name
+}
+
